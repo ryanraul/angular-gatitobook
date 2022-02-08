@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { minusculoValidator } from './minusculo.validator';
 import { NovoUsuario } from './novo-usuario';
 import { NovoUsuarioService } from './novo-usuario.service';
+import { UsuarioExisteService } from './usuario-existe.service';
 
 @Component({
   selector: 'app-novo-usuario',
@@ -14,13 +16,17 @@ export class NovoUsuarioComponent implements OnInit {
 
   constructor(
     private novoUsuarioService: NovoUsuarioService,
-    private formBuilder: FormBuilder) { }
+    private formBuilder: FormBuilder,
+    private usuarioExistenteService: UsuarioExisteService) { }
 
   ngOnInit(): void {
     this.novoUsuarioForm = this.formBuilder.group({
-      email: [''],
-      fullName: [''],
-      userName: [''],
+      email: ['', [Validators.required,Validators.email]],
+      fullName: ['', [Validators.required, Validators.minLength(15)]],
+      userName: ['', 
+        [minusculoValidator], 
+        [this.usuarioExistenteService.usuarioJaExiste()]
+      ],
       password: [''],
     })
   }

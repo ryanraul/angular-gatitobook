@@ -19,7 +19,7 @@ export class TokenService {
     localStorage.removeItem(KEY);
   }
 
-  possuiToken(){
+  possuiToken(): boolean {
     return !!this.retornaToken();
   }
 }
